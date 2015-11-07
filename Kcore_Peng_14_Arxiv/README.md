@@ -1,0 +1,1 @@
+This file is for the develop of algorithm for K-core in Peng's paper in 14 Arxiv.
