@@ -4,49 +4,46 @@
 
    Author: 			Chenghong Wang <cwang132@syr.edu>
    
-   Instruction:		This program is a multiprocessor programming code to multiply 
-					two matrixes, in this code we use POSIX pthread api to perform 
-					parallel programming.
+   Instruction:			This program is a python package which is designed to compute the community
+				partition by using kcore method. The kore method is to firstly reduce the
+				original graph by using kcore method; Then perform community detection method
+				on the searched kcore subgraph, then recover the subgraph and the community
+				structure.
 					
-	Usage:			Compile the matrix.c under Linux system use the following command:
-					$ gcc -pthread -o matrix.out matrix.c
-					After compile, you can run it with:
-					$ ./matrix.out
+	Usage:			This is a package of kcore community detection, to use all function here, by
+				using :
+
+					import kcore_comun
+		
+				in your python source code
 					
-	Comment:		If you want to modify the scale of current matrix you should change 
-					the matrix define part in this code followed the instruction in that 
-					section.
 '''
 
 import community
 import networkx as nx
-#import matplotlib
-#matplotlib.use('Agg')
-#import matplotlib.pyplot as plt
 
 
+def kcore_partition(k, FILE_PATH):
 #Read Network files as gml file type, create a networkx graph and use the eisted graph file
 #Random graph may have poor performance, erdos renyi graph doesn't have true community structure
-G = nx.read_gml('dolphins.gml')
-H = nx.k_core (G,3)
-#Compute the best partition by using louvain method
-print G.nodes()
-print H.nodes()
-partition = community.best_partition(H)
+	G = nx.read_gml(FILE_PATH)
+	H = nx.k_core (G, k)
+	partition = community.best_partition(H)
+	communities = list(set(partition.values()))
+	new_partition = {}
+	for community_part in communities:
+        	new_partition[community_part] = []
+	#print new_partition
+	for nodes in partition.keys():
+        	new_partition[partition[nodes]].append(nodes)
+	#print new_partition
+	return new_partition
+	
+if __name__ == '__main__':
+	partition = kcore_partition(3,'dolphins.gml')
+	print partition
 
-#print partition.values()
-#print partition[34]
-#Plot the result
-#values = [partition.get(node) for node in H.nodes()]
-#print H.number_of_nodes()
-
-#nx.draw_spring(H, cmap = plt.get_cmap('jet'), node_color = values, node_size=30, with_labels=False)
-#plt.savefig('dolphinKcore3')
-
-#print partition.values()
-communities = list(set(partition.values()))
-print communities
-
+'''
 for nodes in G.nodes():
 	if nodes not in H.nodes():
 		best_mod = 0
@@ -58,4 +55,8 @@ for nodes in G.nodes():
 print partition
 				
 
-
+def best_partition(G):
+	partition = community.best_partition(G)
+	communities = list(set(partition.values()))
+'''
+		
