@@ -38,25 +38,20 @@ def kcore_partition(k, FILE_PATH):
         	new_partition[partition[nodes]].append(nodes)
 	#print new_partition
 	return new_partition
-	
-if __name__ == '__main__':
-	partition = kcore_partition(3,'dolphins.gml')
-	print partition
-
-'''
-for nodes in G.nodes():
+	'''
+def recovery_freedy(partition_original, partition_kcore):
+	for nodes in G.nodes():
 	if nodes not in H.nodes():
 		best_mod = 0
 		for coms in communities:
 			partition[nodes] = coms
 			if community.modularity(partition, H) < best_mod:
 				del partition[nodes]
+	return recover_partition
+	'''
+if __name__ == '__main__':
+	partition = kcore_partition(3,'dolphins.gml')
+	print partition
 
-print partition
-				
 
-def best_partition(G):
-	partition = community.best_partition(G)
-	communities = list(set(partition.values()))
-'''
 		
