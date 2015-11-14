@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import sys
 from math import*
+import argparse
 
 
 def jaccard_similarity_coefficient(c_true, c_pred):
@@ -55,18 +57,18 @@ def jaccard_similarity_coefficient(c_true, c_pred):
 
     # initlize two array to hold the highest Jaccard similarity coefficient get from  
     # the most similar community from c_pred to c_true and from c_true to c_pred respectively.
-    Jxy = [0] * len(x)
-    Jyx = [0] * len(y)
+    Jxy = [0] * len(c_true)
+    Jyx = [0] * len(c_pred)
     i = 0
     j = 0
 
 
     #iterate over every community Ci in the first dictionary c_true.  
     #For each Ci, find the Dj in the second dictionary c_pred that is closest
-    for keyx in x:
-        for keyy in y:
-            intersection = len(set.intersection(*[set(x.get(keyx)), set(y.get(keyy))]))
-            union = len(set.union(*[set(x.get(keyx)), set(y.get(keyy))]))
+    for keyx in c_true:
+        for keyy in c_pred:
+            intersection = len(set.intersection(*[set(c_true.get(keyx)), set(c_pred.get(keyy))]))
+            union = len(set.union(*[set(c_true.get(keyx)), set(c_pred.get(keyy))]))
             coefficient = intersection/float(union)
             if (coefficient >Jxy[i]):
                 Jxy[i] = coefficient
@@ -74,10 +76,10 @@ def jaccard_similarity_coefficient(c_true, c_pred):
     
     #iterate over every community Di in the second dictionary c_true.  
     #For each Di, find the Cj in the first dictionary c_true that is closest
-    for keyy in y:
-        for keyx in x:
-            intersection = len(set.intersection(*[set(x.get(keyx)), set(y.get(keyy))]))
-            union = len(set.union(*[set(x.get(keyx)), set(y.get(keyy))]))
+    for keyy in c_pred:
+        for keyx in c_true:
+            intersection = len(set.intersection(*[set(c_true.get(keyx)), set(c_pred.get(keyy))]))
+            union = len(set.union(*[set(c_true.get(keyx)), set(c_pred.get(keyy))]))
             coefficient = intersection/float(union)
             if (coefficient >Jyx[j]):
                 Jyx[j] = coefficient
@@ -89,5 +91,17 @@ def jaccard_similarity_coefficient(c_true, c_pred):
     F = 2*(P*R)/(P+R)
     
     return F
+    
+if len(sys.argv) < 3:
+	print "Please give 2 file names as the arguments"   
+file1, file2 = sys.argv[1],sys.argv[2]
+c_true = {}
+c_pred = {}
+with open(file1) as fd1, open(file2) as fd2:
+    c_true = eval(fd1.readline())
+    c_pred = eval(fd2.readline())
 
-            
+
+print jaccard_similarity_coefficient(c_true, c_pred)
+
+
