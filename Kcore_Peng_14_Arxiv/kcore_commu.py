@@ -16,6 +16,8 @@
 					In Linux Command Line using the following command
 					
 					$python kcore_comm.py [INPUT_FILE_TYPE] [Kcore Number]
+	
+	***MODIFIED by Rongqian Zhang Nov.18 2015
 					
 '''
 
@@ -35,13 +37,13 @@ import sys
 #############################################################################################
 	
 def convert_partition_format(original_partition):
-	communities = list(set(partition.values()))
+	communities = list(set(original_partition.values()))
 	new_partition = {}
 	for community_part in communities:
         	new_partition[community_part] = []
 	#print new_partition
-	for nodes in partition.keys():
-        	new_partition[partition[nodes]].append(nodes)
+	for nodes in original_partition.keys():
+        	new_partition[original_partition[nodes]].append(nodes)
 	#print new_partition
 	return new_partition
 
@@ -110,17 +112,12 @@ def vote_for_node(kcore_partition, sorted_recover_nodes, G):
 			kcore_partition[node] = vote_dic_sorted[0][0]
 	return kcore_partition	
 
-
-
-if __name__ == '__main__':
-
-	command2 = sys.argv[1]
-	command3 = sys.argv[2]
-	#Read Network files as gml file type, create a networkx graph and use the eisted graph file
+def detect_recover(filename,k):
+    	#Read Network files as gml file type, create a networkx graph and use the eisted graph file
 	#Random graph may have poor performance, erdos renyi graph doesn't have true community structure
-	G = nx.read_gml(command2)
-	H = nx.k_core (G, int(command3))
-	print len(H.nodes())
+	G = nx.read_gml(filename)
+	H = nx.k_core (G, int(k))
+	#print len(H.nodes())
 	#kcore_partition = kcore_partition(H)
 	partition = community.best_partition(H)
 	#print partition 
@@ -128,6 +125,27 @@ if __name__ == '__main__':
 	#print sorted_recover_nodes
 	vote_for_node(partition, sorted_recover_nodes, G)
 	new_partition = vote_for_node(partition, sorted_recover_nodes, G)
-	print len(new_partition.keys())
-	convert = convert_partition_format(new_partition)
-	print len(convert[-1])	
+	return convert_partition_format(new_partition)
+    
+
+
+if __name__ == '__main__':
+
+    	print detect_recover(sys.argv[1],sys.argv[2])
+#	command2 = sys.argv[1]
+#	command3 = sys.argv[2]
+#	#Read Network files as gml file type, create a networkx graph and use the eisted graph file
+#	#Random graph may have poor performance, erdos renyi graph doesn't have true community structure
+#	G = nx.read_gml(command2)
+#	H = nx.k_core (G, int(command3))
+#	#print len(H.nodes())
+#	#kcore_partition = kcore_partition(H)
+#	partition = community.best_partition(H)
+#	#print H 
+#	sorted_recover_nodes = sort_by_neighbor(H, G)
+#	#print sorted_recover_nodes
+#	vote_for_node(partition, sorted_recover_nodes, G)
+#	new_partition = vote_for_node(partition, sorted_recover_nodes, G)
+#	#print len(new_partition.keys())
+#	print convert_partition_format(new_partition)
+#	#print len(convert[-1])	
