@@ -1,0 +1,9 @@
+README
+setup.py
+community/__init__.py
+python_louvain.egg-info/PKG-INFO
+python_louvain.egg-info/SOURCES.txt
+python_louvain.egg-info/dependency_links.txt
+python_louvain.egg-info/entry_points.txt
+python_louvain.egg-info/requires.txt
+python_louvain.egg-info/top_level.txt
