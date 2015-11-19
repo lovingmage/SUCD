@@ -11,6 +11,15 @@ The necessary toolkit and packages required in our implementation are listed as 
 
 Use can firstly install python and using python pip toolkit to install the remain toolkits. Please do not use python 3.3 or above version, and do not install networkx version other than 1.9.19. Please be aware that the Networkx 1.10.x have some bugs remain unsolved.
 
+## 0x03 Get Started ##
+Be cool if you have already done the previous works, you can start to play the script now.
+Within this files, contains all the code wich can perform k-core community detection works, Peng gave us a method on how to boost up the community detection works on kcore subgraph, and the algorithm can be described as follows:
+
+1. For any given graph G, search the kcore subgraph H.
+2. Perform some community detection algorithm on the kcore subgraph H.
+3. For each nodes that not in H but in G, we proceed them into recover step.
+4. Optimize the total network structure.
+
 ## Reference ##
 
 1. Peng, Chengbin, Tamara G. Kolda, and Ali Pinar. "Accelerating community detection by using k-core subgraphs." arXiv preprint arXiv:1403.2226 (2014).
