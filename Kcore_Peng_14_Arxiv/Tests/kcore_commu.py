@@ -17,7 +17,8 @@
 					
 					$python kcore_comm.py [INPUT_FILE_TYPE] [Kcore Number]
 	
-	***MODIFIED by Rongqian Zhang Nov.18 2015
+	***MODIFIED by Rongqian Zhang Nov.18 2015	
+				   Chenghong Wang Dec. 20 2015 : Rewrite the graph read method.
 					
 '''
 
@@ -25,6 +26,7 @@ import community
 import networkx as nx
 from collections import Counter
 
+import time
 import sys
 
 	
@@ -112,8 +114,9 @@ def vote_for_node(kcore_partition, sorted_recover_nodes, G):
 			kcore_partition[node] = vote_dic_sorted[0][0]
 	return kcore_partition	
 
+#Optional Debugging Code, Could be removed in the next version.
 def detect_recover(filename,k):
-    	#Read Network files as gml file type, create a networkx graph and use the eisted graph file
+    #Read Network files as gml file type, create a networkx graph and use the eisted graph file
 	#Random graph may have poor performance, erdos renyi graph doesn't have true community structure
 	G = nx.read_gml(filename)
 	H = nx.k_core (G, int(k))
@@ -130,22 +133,37 @@ def detect_recover(filename,k):
 
 
 if __name__ == '__main__':
+    #Read Network files as gml file type, create a networkx graph and use the eisted graph file
+	#Random graph may have poor performance, erdos renyi graph doesn't have true community structure
+    
+	#Start log file, create log file and start.
+	FILE_LOG_NAME = 'LOG_File_'.join(sys.argv[2]).join(' ').join(sys.argv[1]).join('.log')
+	LOG_FILE = open(FILE_LOG_NAME,'w')
+	TEMP_INFO = 'Starting Community Detection Section on FILE ['.join('sys.argv[2]').join('] ').join('with k_core value ').join(sys.argv[1])
+	LOG_FILE.write(TEMP_INFO)
+	LOG_FILE.write('\n')
+	
+	Kore_Value = int(sys.argv[1])
+	FILE_PATH = sys.argv[2]
 
-    	print detect_recover(sys.argv[1],sys.argv[2])
-#	command2 = sys.argv[1]
-#	command3 = sys.argv[2]
-#	#Read Network files as gml file type, create a networkx graph and use the eisted graph file
-#	#Random graph may have poor performance, erdos renyi graph doesn't have true community structure
-#	G = nx.read_gml(command2)
-#	H = nx.k_core (G, int(command3))
-#	#print len(H.nodes())
-#	#kcore_partition = kcore_partition(H)
-#	partition = community.best_partition(H)
-#	#print H 
-#	sorted_recover_nodes = sort_by_neighbor(H, G)
-#	#print sorted_recover_nodes
-#	vote_for_node(partition, sorted_recover_nodes, G)
-#	new_partition = vote_for_node(partition, sorted_recover_nodes, G)
-#	#print len(new_partition.keys())
-#	print convert_partition_format(new_partition)
-#	#print len(convert[-1])	
+	G = nx.read_edgelist(FILE_PATH)
+	LOG_FILE.write('Transaction: Parse External File Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % time.time())
+	LOG_FILE.write('\n')
+
+	H = nx.k_core (G, int(sys.argv[1]))
+	LOG_FILE.write('Transaction: k-core Search Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % time.time())
+	LOG_FILE.write('\n')
+	
+	partition = community.best_partition(H)
+	LOG_FILE.write('Transaction: Partition on K-core Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % time.time())
+	LOG_FILE.write('\n')
+	#print partition 
+	
+	sorted_recover_nodes = sort_by_neighbor(H, G)
+	new_partition = vote_for_node(partition, sorted_recover_nodes, G)
+	LOG_FILE.write('Transaction: Recovery Process Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % time.time())
+	LOG_FILE.write('\n')

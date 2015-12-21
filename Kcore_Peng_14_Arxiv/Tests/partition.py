@@ -1,8 +1,9 @@
 import community
-import sys
 import networkx as nx
+import time
 
-
-G = nx.read_gml('soc-google-plus.gml')
+print time.time()
+G = nx.read_edgelist('facebook_combined.txt')
+print time.time()
 partition = community.best_partition(G)
-print partition
+print time.time()
