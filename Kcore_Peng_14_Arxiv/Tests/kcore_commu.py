@@ -96,6 +96,7 @@ def sort_by_neighbor(H, G):
 
 def vote_for_node(kcore_partition, sorted_recover_nodes, G):
 	#rec_partition = kcore_partition
+	exclusive_comm = -1
 	for node in sorted_recover_nodes:
 		vote_list = []
 		for neighbor in G.neighbors(node):
@@ -109,9 +110,11 @@ def vote_for_node(kcore_partition, sorted_recover_nodes, G):
 		vote_dic_sorted = sorted(vote_dic.iteritems(), key=lambda d:d[1], reverse = False )
 		#print vote_dic_sorted
 		if not vote_dic_sorted:
-			kcore_partition[node] = -1
+			kcore_partition[node] = exclusive_comm
+			exclusive_comm = exclusive_comm -1
 		else:
 			kcore_partition[node] = vote_dic_sorted[0][0]
+	print kcore_partition
 	return kcore_partition	
 
 #Optional Debugging Code, Could be removed in the next version.
