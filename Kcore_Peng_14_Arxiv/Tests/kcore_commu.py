@@ -96,8 +96,8 @@ def sort_by_neighbor(H, G):
 
 def vote_for_node(kcore_partition, sorted_recover_nodes, G):
 	#rec_partition = kcore_partition
-	exclusive_comm = -1
 	for node in sorted_recover_nodes:
+		#print int(node)
 		vote_list = []
 		for neighbor in G.neighbors(node):
 			if neighbor not in kcore_partition.keys():
@@ -110,11 +110,10 @@ def vote_for_node(kcore_partition, sorted_recover_nodes, G):
 		vote_dic_sorted = sorted(vote_dic.iteritems(), key=lambda d:d[1], reverse = False )
 		#print vote_dic_sorted
 		if not vote_dic_sorted:
-			kcore_partition[node] = exclusive_comm
-			exclusive_comm = exclusive_comm -1
+			kcore_partition[node] = 0 - int(node)
 		else:
 			kcore_partition[node] = vote_dic_sorted[0][0]
-	print kcore_partition
+	#print kcore_partition
 	return kcore_partition	
 
 #Optional Debugging Code, Could be removed in the next version.
@@ -167,6 +166,8 @@ if __name__ == '__main__':
 	
 	sorted_recover_nodes = sort_by_neighbor(H, G)
 	new_partition = vote_for_node(partition, sorted_recover_nodes, G)
+	#cov_partition = convert_partition_format(new_partition) 
+	#print new_partition 
 	LOG_FILE.write('Transaction: Recovery Process Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')

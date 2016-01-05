@@ -1,3 +1,5 @@
 3
-Transaction: Parse External File Successful. 	Finish Time: 1452014235.242510
-Transaction: k-core Search Successful. 	Finish Time: 1452014236.199640
+Transaction: Parse External File Successful. 	Finish Time: 1452017464.679000
+Transaction: k-core Search Successful. 	Finish Time: 1452017464.703000
+Transaction: Partition on K-core Successful. 	Finish Time: 1452017464.764000
+Transaction: Recovery Process Successful. 	Finish Time: 1452017464.846000
