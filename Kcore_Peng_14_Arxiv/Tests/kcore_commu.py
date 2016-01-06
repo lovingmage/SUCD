@@ -19,6 +19,8 @@
 	
 	***MODIFIED by Rongqian Zhang Nov.18 2015	
 				   Chenghong Wang Dec. 20 2015 : Rewrite the graph read method.
+				   Chenghong Wang Jan. 5 2016 : Revised the community detection method by put all 
+												disconnect node of kcore into exclusive communities.
 					
 '''
 
@@ -36,6 +38,16 @@ import sys
 #											
 #	This function will convert Partition Format from the original format 		
 #	to the one which we will used in community similarity comparison process.	
+#   The input partition format:
+#
+#	partition_original = {node1: partition 1, node2: partition 2 ...}
+#	The keys are the nodes and the key values are the corresponding partition
+#
+#	The output partition format:
+#
+#	new_partition = {partition1 : [node1, node2, ...], partition2: [node8, node9,...]...}
+#	The keys are the communities, and the key values are the nodes list	
+#	which beloings to the key community.
 #############################################################################################
 	
 def convert_partition_format(original_partition):
@@ -57,7 +69,7 @@ def convert_partition_format(original_partition):
 #											
 #       This function will sort the recover nodes based on the inside-kcore neighbors,  
 #       the function will receive two graph H and G, and then return the asscending     
-#	ordered nodes sequence which need to be recovered.			        
+#		ordered nodes sequence which need to be recovered.			        
 ##############################################################################################
 	
 def sort_by_neighbor(H, G):
@@ -83,7 +95,7 @@ def sort_by_neighbor(H, G):
 
 
 ##############################################################################################
-#       Function : vote_for_node( kcore partition kcore_partition, 
+#       Function : vote_for_node( kcore partition kcore_partition, 								
 #				  sort order recover nodes sorted_recover_nodes,
 #				  Original Graph G ):                   
 #                                                                                            
