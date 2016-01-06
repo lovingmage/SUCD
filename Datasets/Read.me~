@@ -1,0 +1,10 @@
+
+* The folder includes small and medium value datasets.
+
+* Syracuse facebook dataset is  the small dataset.
+
+* Google plus dataset is the medium dataset.
+
+* There are two files of each dataset, one is  the original dataset obtained as such
+  from the dataset provider and the other file being the requested ".gml" format.
+
