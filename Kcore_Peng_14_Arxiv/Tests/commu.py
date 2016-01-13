@@ -143,52 +143,45 @@ def detect_recover(filename,k):
 	vote_for_node(partition, sorted_recover_nodes, G)
 	new_partition = vote_for_node(partition, sorted_recover_nodes, G)
 	return convert_partition_format(new_partition)
-    
+   
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     #Read Network files as gml file type, create a networkx graph and use the eisted graph file
 	#Random graph may have poor performance, erdos renyi graph doesn't have true community structure
-    	kcore_value = sys.argv[2]
-	FILE_PATH = sys.argv[1]
-   	FILE_NAME = FILE_PATH.split("/")
+    
 	#Start log file, create log file and start.
-	FILE_LOG_NAME = 'LOG_File_' + (FILE_NAME[-1]) + (kcore_value) + ('.log')
+	FILE_PATH = sys.argv[1]
+	FILE_NAME = FILE_PATH.split("/")
+	FILE_LOG_NAME = "LOG_File_"+(FILE_NAME[-1])+ "_" + "without_kcore.log"
 	LOG_FILE = open(FILE_LOG_NAME,'w')
-	TEMP_INFO = 'Starting Community Detection Section on FILE [ ' + (FILE_PATH) +' ] ' + 'with k_core value ' + (kcore_value)
+	TEMP_INFO = 'Starting Community Detection Section on FILE: '+(sys.argv[1]) + "without kcore"
+	#print TEMP_INFO
 	LOG_FILE.write(TEMP_INFO)
 	LOG_FILE.write('\n')
 	
+	#Kore_Value = int(sys.argv[1])
 
 	G = nx.read_edgelist(FILE_PATH)
 	LOG_FILE.write('Transaction: Parse External File Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')
-	
-	if int(kcore_value) == 0:
-		kcore_partition = community.best_partition(G)
-		LOG_FILE.write('Transaction: Partition on K-core Successful.(without recovery) \t')
-        	LOG_FILE.write('Finish Time: %f' % time.time())
-        	LOG_FILE.write('\n')
-	else:
 
-		H = nx.k_core (G, int(kcore_value))
-		LOG_FILE.write('Transaction: k-core Search Successful. \t')
-		LOG_FILE.write('Finish Time: %f' % time.time())
-		LOG_FILE.write('\n')
+	'''H = nx.k_core (G, int(sys.argv[1]))
+	LOG_FILE.write('Transaction: k-core Search Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % time.time())
+	LOG_FILE.write('\n')'''
 	
-		tmp_partition = community.best_partition(H)
-		LOG_FILE.write('Transaction: Partition on K-core Successful. \t')
-		LOG_FILE.write('Finish Time: %f' % time.time())
-		LOG_FILE.write('\n')
-		#print partition 
+	partition = community.best_partition(G)
+	LOG_FILE.write('Transaction: Partition on K-core Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % time.time())
+	LOG_FILE.write('\n')
+	print partition 
 	
-		sorted_recover_nodes = sort_by_neighbor(H, G)
-		kcore_partition = vote_for_node(tmp_partition, sorted_recover_nodes, G)
-		#cov_partition = convert_partition_format(new_partition) 
-		#print new_partition 
-		LOG_FILE.write('Transaction: Recovery Process Successful. \t')
-		LOG_FILE.write('Finish Time: %f' % time.time())
-		LOG_FILE.write('\n')
+	'''sorted_recover_nodes = sort_by_neighbor(H, G)
+	new_partition = vote_for_node(partition, sorted_recover_nodes, G)
+	#cov_partition = convert_partition_format(new_partition) 
+	#print new_partition 
+	LOG_FILE.write('Transaction: Recovery Process Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % time.time())
+	LOG_FILE.write('\n')'''
 
-	print kcore_partition
