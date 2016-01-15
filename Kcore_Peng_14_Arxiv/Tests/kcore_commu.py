@@ -165,7 +165,7 @@ if __name__ == '__main__':
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')
 	
-	if int(kcore_value) == 0:
+	if int(kcore_value) == 0: 
 		kcore_partition = community.best_partition(G)
 		LOG_FILE.write('Transaction: Partition on K-core Successful.(without recovery) \t')
         	LOG_FILE.write('Finish Time: %f' % time.time())
