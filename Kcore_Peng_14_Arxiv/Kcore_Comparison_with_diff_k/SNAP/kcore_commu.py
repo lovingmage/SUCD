@@ -21,7 +21,7 @@
 '''
 
 import snap
-import os
+import sys
 import time
 
 #This function is used to create the node vector called NodeV of a given graph
@@ -145,18 +145,55 @@ def vote_for_node(node, PartitionH, G, Kcore):
 
 if __name__ == '__main__':
 
-	G = snap.LoadEdgeList(snap.PUNGraph, "facebook_combined.txt", 0, 1)
+	KCORE_VALUES = sys.argv[2]
+	FILE_PATH = sys.argv[1]
+
+	LOG_FILE_PATH = '/logs/'
+
+	FILE_NAME = FILE_PATH.split("/")
+	#Start log file, create log file and start.
+	FILE_LOG_NAME = 'LOG_File_' + (FILE_NAME[-1]) + (KCORE_VALUES) + ('.log')
+	LOG_FILE = open(FILE_LOG_NAME,'w')
+	TEMP_INFO = 'Starting Community Detection Section on FILE [ ' + (FILE_PATH) +' ] ' + 'with k_core value ' + (KCORE_VALUES)
+	LOG_FILE.write(TEMP_INFO)
+	LOG_FILE.write('\n')
+
+
+	G = snap.LoadEdgeList(snap.PUNGraph, FILE_PATH, 0, 1)
+	LOG_FILE.write('Transaction: Parse External File Successful. \t')
+	START_TIME = time.time()
+	LOG_FILE.write('Finish Time: %f' % START_TIME)
+	LOG_FILE.write('\n')
+	print G
+
 	
 	NodeV_G = create_node_vector(G)
-	print NodeV_G
-	Kcore = snap.GetKCore(G, 5)
+	Kcore = snap.GetKCore(G, int(KCORE_VALUES))
 	NodeV_Kcore = create_node_vector(Kcore)
+	LOG_FILE.write('Transaction: k-core Search Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % time.time())
+	LOG_FILE.write('\n')
+	print NodeV_Kcore
+
+
 	NodeV_Diff = get_diff_from_kcore(NodeV_G, NodeV_Kcore)
 
 	SortH = sort_by_neighbor(NodeV_Diff, Kcore, G)
 	Partition_KcoreH = community_partition(Kcore)
-	Partition_RecoverH = recover_partition_by_kcore(Partition_KcoreH, SortH, G)
+	LOG_FILE.write('Transaction: Partition on K-core Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % time.time())
+	LOG_FILE.write('\n')
 
+	Partition_RecoverH = recover_partition_by_kcore(Partition_KcoreH, SortH, G)
+	END_TIME = time.time()
+	LOG_FILE.write('Transaction: Recovery Process Successful. \t')
+	LOG_FILE.write('Finish Time: %f' % END_TIME)
+	LOG_FILE.write('\n')
+
+	TIME = END_TIME - START_TIME
+	LOG_FILE.write('Total time used. \t')
+	LOG_FILE.write('Total Time: %f' % TIME)
+	LOG_FILE.write('\n')
 
 	#Start Community Detection on Kcore Subgraph
 	#partition = snap.TInt(0)
