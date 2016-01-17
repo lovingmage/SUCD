@@ -164,7 +164,7 @@ if __name__ == '__main__':
 	START_TIME = time.time()
 	LOG_FILE.write('Finish Time: %f' % START_TIME)
 	LOG_FILE.write('\n')
-	print G
+	#print G
 
 	
 	NodeV_G = create_node_vector(G)
@@ -173,7 +173,7 @@ if __name__ == '__main__':
 	LOG_FILE.write('Transaction: k-core Search Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')
-	print NodeV_Kcore
+	#print NodeV_Kcore
 
 
 	NodeV_Diff = get_diff_from_kcore(NodeV_G, NodeV_Kcore)
@@ -195,6 +195,8 @@ if __name__ == '__main__':
 	LOG_FILE.write('Total Time: %f' % TIME)
 	LOG_FILE.write('\n')
 
+	for key in Partition_RecoverH:
+		print Partition_RecoverH[key]
 	#Start Community Detection on Kcore Subgraph
 	#partition = snap.TInt(0)
 	#partition.Val = partition.Val + 2
