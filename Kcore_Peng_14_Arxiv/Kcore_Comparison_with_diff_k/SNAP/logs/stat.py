@@ -1,7 +1,7 @@
 import os
-for it in range(1, 797, 1):
+for it in range(2, 42, 2):
 	IT = '%d' %it
-	tem_name = 'LOG_File_facebook_combined.txt' + IT + '.log' 
+	tem_name = './emali/LOG_File_email-Enron.txt' + IT + '.log' 
 	f = open(tem_name,'r')  
 	f.readline()
 	f.readline()

@@ -167,19 +167,9 @@ if __name__ == '__main__':
 	#print G
 
 	
-	NodeV_G = create_node_vector(G)
-	#Kcore = snap.GetKCore(G, int(KCORE_VALUES))
-	#NodeV_Kcore = create_node_vector(Kcore)
-	LOG_FILE.write('Transaction: k-core Search Successful. \t')
-	LOG_FILE.write('Finish Time: %f' % time.time())
-	LOG_FILE.write('\n')
-	#print NodeV_Kcore
-
-
-	#NodeV_Diff = get_diff_from_kcore(NodeV_G, NodeV_Kcore)
-
-	#SortH = sort_by_neighbor(NodeV_Diff, Kcore, G)
-	Partition = community_partition(G)
+	CommuV = snap.TCnComV()
+	modularity = snap.CommunityCNM(G, CommuV)
+	#Partition = community_partition(G)
 	END_TIME = time.time()
 	LOG_FILE.write('Transaction: Recovery Process Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % END_TIME)
@@ -190,8 +180,6 @@ if __name__ == '__main__':
 	LOG_FILE.write('Total Time: %f' % TIME)
 	LOG_FILE.write('\n')
 
-	for key in Partition:
-		print Partition[key]
 	#Start Community Detection on Kcore Subgraph
 	#partition = snap.TInt(0)
 	#partition.Val = partition.Val + 2

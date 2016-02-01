@@ -116,10 +116,11 @@ def recover_partition_by_kcore(Partition_KcoreH, SortH, G):
 	Recover_PartitionH = snap.TIntIntH()
 	Recover_PartitionH = Partition_KcoreH
 
-	i = 0
+	i = -1
 	for node in SortH:
 		if SortH[node] == 0:
-			Recover_PartitionH[node] = i - 1
+			Recover_PartitionH[node] = i 
+			i = i - 1
 		else :
 			Recover_PartitionH[node] = vote_for_node(node, Partition_KcoreH, G, Kcore)
 	return Recover_PartitionH
@@ -170,6 +171,7 @@ if __name__ == '__main__':
 	NodeV_G = create_node_vector(G)
 	Kcore = snap.GetKCore(G, int(KCORE_VALUES))
 	NodeV_Kcore = create_node_vector(Kcore)
+	print NodeV_Kcore.Len()
 	LOG_FILE.write('Transaction: k-core Search Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')
@@ -195,8 +197,8 @@ if __name__ == '__main__':
 	LOG_FILE.write('Total Time: %f' % TIME)
 	LOG_FILE.write('\n')
 
-	for key in Partition_RecoverH:
-		print Partition_RecoverH[key]
+	#for key in Partition_RecoverH:
+	#	print Partition_RecoverH[key]
 	#Start Community Detection on Kcore Subgraph
 	#partition = snap.TInt(0)
 	#partition.Val = partition.Val + 2
