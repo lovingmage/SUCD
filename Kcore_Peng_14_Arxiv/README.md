@@ -8,6 +8,9 @@ The necessary toolkit and packages required in our implementation are listed as 
 * Networkx 1.9.19 (Do not use the latest version.)
 * python-louvain
 * Matplotlib
+* Networkx-community-detection toolkit
+
+Note that the download part of networkx community detection is post here : https://bitbucket.org/taynaud/python-louvain
 
 Use can firstly install python and using python pip toolkit to install the remain toolkits. Please do not use python 3.3 or above version, and do not install networkx version other than 1.9.19. Please be aware that the Networkx 1.10.x have some bugs remain unsolved.
 
