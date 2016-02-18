@@ -173,4 +173,7 @@ if __name__ == "__main__":
 	LOG_FILE.write('\n')
 	print partition 
 	
-
+	#calculate the modularity
+        mo = community.modularity(partition,G)
+        LOG_FILE.write('Modularity is: ' + str(mo))
+        LOG_FILE.write('\n')
