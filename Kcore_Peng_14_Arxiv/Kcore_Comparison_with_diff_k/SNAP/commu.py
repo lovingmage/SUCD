@@ -168,10 +168,10 @@ if __name__ == '__main__':
 
 	
 	CommuV = snap.TCnComV()
-	modularity = snap.CommunityCNM(G, CommuV)
-	#Partition = community_partition(G)
+	#modularity = snap.CommunityCNM(G, CommuV)
+	Partition = community_partition(G)
 	END_TIME = time.time()
-	LOG_FILE.write('Transaction: Recovery Process Successful. \t')
+	LOG_FILE.write('Transaction: Partition  Process Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % END_TIME)
 	LOG_FILE.write('\n')
 
@@ -185,7 +185,10 @@ if __name__ == '__main__':
 	#partition.Val = partition.Val + 2
 	#print partition.Val
 
-	
+	#sort community label based on node ID in ASC
+	Partition.Sort(True, True)
+        for key in Partition:
+                print Partition[key]
 
 
 	

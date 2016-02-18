@@ -119,7 +119,7 @@ def vote_for_node(kcore_partition, sorted_recover_nodes, G):
 		#print vote_list
 		vote_dic = Counter(vote_list)
 		#print vote_dic
-		vote_dic_sorted = sorted(vote_dic.iteritems(), key=lambda d:d[1], reverse = False )
+		vote_dic_sorted = sorted(vote_dic.iteritems(), key=lambda d:d[1], reverse = True )
 		#print vote_dic_sorted
 		if not vote_dic_sorted:
 			kcore_partition[node] = 0 - int(node)
@@ -151,23 +151,23 @@ if __name__ == '__main__':
 	#Random graph may have poor performance, erdos renyi graph doesn't have true community structure
     
 	#Start log file, create log file and start.
-	DATA_FILE = sys.argv[2].split("/")
-	FILE_LOG_NAME = "LOG_File_"+(DATA_FILE[-1])+ "_" + (sys.argv[1]) + ".log"
+	DATA_FILE = sys.argv[1].split("/")
+	FILE_LOG_NAME = "LOG_File_"+ (DATA_FILE[-1]) + sys.argv[2] + ".log"
 	LOG_FILE = open(FILE_LOG_NAME,'w')
-	TEMP_INFO = 'Starting Community Detection Section on FILE: '+(sys.argv[2])+(' with k_core value of ') + (sys.argv[1])
+	TEMP_INFO = 'Starting Community Detection Section on FILE: '+(sys.argv[1])+(' with k_core value of ') + (sys.argv[2])
 	#print TEMP_INFO
 	LOG_FILE.write(TEMP_INFO)
 	LOG_FILE.write('\n')
 	
-	Kore_Value = int(sys.argv[1])
-	FILE_PATH = sys.argv[2]
+	Kore_Value = int(sys.argv[2])
+	FILE_PATH = sys.argv[1]
 
 	G = nx.read_edgelist(FILE_PATH)
 	LOG_FILE.write('Transaction: Parse External File Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')
 
-	H = nx.k_core (G, int(sys.argv[1]))
+	H = nx.k_core (G, int(sys.argv[2]))
 	LOG_FILE.write('Transaction: k-core Search Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')

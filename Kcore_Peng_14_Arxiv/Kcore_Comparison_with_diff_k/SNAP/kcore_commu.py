@@ -1,4 +1,4 @@
-rty'''
+'''
    This code is designed and written by Chenghong Wang.
    Do not copy, disclose, or distribute without explicit written permission. 
 
@@ -171,7 +171,7 @@ if __name__ == '__main__':
 	NodeV_G = create_node_vector(G)
 	Kcore = snap.GetKCore(G, int(KCORE_VALUES))
 	NodeV_Kcore = create_node_vector(Kcore)
-	print NodeV_Kcore.Len()
+	#print NodeV_Kcore.Len()
 	LOG_FILE.write('Transaction: k-core Search Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')
@@ -197,8 +197,10 @@ if __name__ == '__main__':
 	LOG_FILE.write('Total Time: %f' % TIME)
 	LOG_FILE.write('\n')
 
-	#for key in Partition_RecoverH:
-	#	print Partition_RecoverH[key]
+	#sort community lebel based on node ID in ASC
+	Partition_RecoverH.Sort(True, True)
+	for key in Partition_RecoverH:
+		print Partition_RecoverH[key]
 	#Start Community Detection on Kcore Subgraph
 	#partition = snap.TInt(0)
 	#partition.Val = partition.Val + 2
