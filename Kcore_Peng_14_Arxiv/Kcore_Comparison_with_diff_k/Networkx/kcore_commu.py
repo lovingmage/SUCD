@@ -185,3 +185,8 @@ if __name__ == '__main__':
 	LOG_FILE.write('Transaction: Recovery Process Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')
+
+	#calculate the modularity
+	mo = community.modularity(new_partition,G)
+        LOG_FILE.write('Modularity is: ' + str(mo))
+        LOG_FILE.write('\n')
