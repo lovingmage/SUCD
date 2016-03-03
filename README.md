@@ -14,9 +14,9 @@ File structure
 
 > **Datasets** : This file contains some popular network files which may used in the future  works.
 
-> **KcorePeng14Arxiv** : This file contains the implementatiopn of Peng's paper on Kcore decomposion for speedup community detection
+> **KcorePeng14Arxiv** : This file contains the implementatiopn of  Kcore decomposion for speedup community detection
 
-> ** Spectral** : This part is the code, used for the research on speedup community detection works by using hardware simulation
+> **Spectral** : This part is the code, used for the research on speedup community detection works by using hardware simulation
 
 
 Basic Codes
