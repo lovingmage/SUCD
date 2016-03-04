@@ -91,12 +91,15 @@ def sort_by_neighbor(H, G):
                
                 if len(neighbors)!=0:
 
-                        ratio = len(neighbors & H_node)/len(neighbors)*1.0
+                        ratio = (len(neighbors & H_node) * 1.0)/(len(neighbors)*1.0)
 
-			if ratio <= 0.3:
+			if ratio == 0:
+				sorted_neighbor_1.append(node)
+
+			if ratio > 0 and ratio <= 0.25:
 				sorted_neighbor_2.append(node)
 				
-			if ratio > 0.3 and ratio <= 0.5:
+			if ratio > 0.25 and ratio <= 0.5:
 				sorted_neighbor_3.append(node)
 			
 			if ratio > 0.5 and ratio <= 0.75:
