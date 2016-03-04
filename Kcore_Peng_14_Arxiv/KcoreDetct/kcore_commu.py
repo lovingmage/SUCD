@@ -19,8 +19,10 @@
 	
 	***MODIFIED by Rongqian Zhang Nov.18 2015	
 				   Chenghong Wang Dec. 20 2015 : Rewrite the graph read method.
-				   Chenghong Wang Jan. 5 2016 : Revised the community detection method by put all 
-												disconnect node of kcore into exclusive communities.
+				   Chenghong Wang Jan. 5 2016 : Revised the community detection method by put all disconnect node of kcore into exclusive communities.
+
+	***MODIFIED by Hongyu Duan Mar.3 2016: changed ratio part in function "vote_for_node" and write ratio data into log file
+			
 					
 '''
 
@@ -73,7 +75,7 @@ def convert_partition_format(original_partition):
 ##############################################################################################
 	
 def sort_by_neighbor(H, G):
-	neighbor_dict = {}
+	global ratio
         sorted_neighbor = []
         sorted_neighbor_1 = []
         sorted_neighbor_2 = []
@@ -83,24 +85,38 @@ def sort_by_neighbor(H, G):
         H_node = set(H.nodes())
         G_node = set(G.nodes())
         G_H_node = G_node - H_node
+
         for node in G_H_node :
                 neighbors = set(G.neighbors(node))
-                #print neighbors
+               
                 if len(neighbors)!=0:
-                        neighbor_dict[node] = len(neighbors & H_node)/len(neighbors)*1.0
 
+                        ratio = len(neighbors & H_node)/len(neighbors)*1.0
+
+			if ratio <= 0.3:
+				sorted_neighbor_2.append(node)
+				
+			if ratio > 0.3 and ratio <= 0.5:
+				sorted_neighbor_3.append(node)
+			
+			if ratio > 0.5 and ratio <= 0.75:
+				sorted_neighbor_4.append(node)
+			
+			if ratio > 0.75:
+				sorted_neighbor_5.append(node)
+						
                 else:
-                        sorted_neighour_1.append(node)
-        for item in neighbor_dict:
-                if neighbor_dict[node]>0 and neighbor_dict[node]<=0.3:
-                        sorted_neighbor_2.append(item)
-                if neighbor_dict[node]>0.3 and neighbor_dict[node]<=0.5:
-                        sorted_neighbor_3.append(item)
-                if neighbor_dict[node]>0.5 and neighbor_dict[node]<=0.75:
-                        sorted_neighbor_4.append(item)
-                if neighbor_dict[node]>0.75:
-                        sorted_neighbor_5.append(item)
-        sorted_neighbor = sorted_neighbor_1 + sorted_neighbor_2 + sorted_neighbor_3 + sorted_neighbor_4 + sorted_neighbor_5
+                        sorted_neighbor_1.append(node)
+
+        sorted_neighbor = sorted_neighbor_5 + sorted_neighbor_4 + sorted_neighbor_3 + sorted_neighbor_2 + sorted_neighbor_1
+
+	ratio = []
+	ratio.append(len(sorted_neighbor_5))
+	ratio.append(len(sorted_neighbor_4))
+	ratio.append(len(sorted_neighbor_3))
+	ratio.append(len(sorted_neighbor_2))
+	ratio.append(len(sorted_neighbor_1))
+	
         return sorted_neighbor
 
 ##############################################################################################
@@ -155,6 +171,7 @@ if __name__ == '__main__':
 	#Random graph may have poor performance, erdos renyi graph doesn't have true community structure
     
 	#Start log file, create log file and start.
+	global ratio
 	DATA_FILE = sys.argv[1].split("/")
 	FILE_LOG_NAME = "LOG_File_"+ (DATA_FILE[-1]) + sys.argv[2] + ".log"
 	LOG_FILE = open(FILE_LOG_NAME,'w')
@@ -172,6 +189,9 @@ if __name__ == '__main__':
 	LOG_FILE.write('\n')
 
 	H = nx.k_core (G, int(sys.argv[2]))
+	if (not H.nodes()):
+		LOG_FILE.write("The community with K of value: " + sys.argv[2] + " is empty; execution stopped")
+		sys.exit(0)
 	LOG_FILE.write('Transaction: k-core Search Successful. \t')
 	LOG_FILE.write('Finish Time: %f' % time.time())
 	LOG_FILE.write('\n')
@@ -194,3 +214,8 @@ if __name__ == '__main__':
 	mo = community.modularity(new_partition,G)
         LOG_FILE.write('Modularity is: ' + str(mo))
         LOG_FILE.write('\n')
+	#ratioContent = "ratio1:" + str(ratio[0]) + "ratio2:" + str(ratio[1]) + "ratio3:" + str(ratio[2]) + "ratio4:" + str(ratio[3]) + "ratio5:" + str(ratio[4])
+	LOG_FILE.write("# of node with ratio of neighbor equals 0 is: " + str(ratio[0]) + '\n' + "# of node with ratio of neighbor in (0-0.3] is : " + str(ratio[1]) + '\n' + "# of node with ratio of neighbor in (0.3,0.5] is: " + str(ratio[2]) + '\n' + "# of node with ratio of neighbor in (0.5, 0.75] is: "  + str(ratio[3]) +'\n' + "# of node with ratio of neighbor in (0.75,1] is: " + str(ratio[4]))
+
+	LOG_FILE.write('\n')
+

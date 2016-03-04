@@ -9,7 +9,9 @@ import argparse
 
 def jaccard_similarity_coefficient(c_true, c_pred):
     
-    """example
+    """
+    Author: Hongyu Duan <duanhongyu2010@gmail.com>
+    example
     x = {'0':[1,2],'2':[3,4]}
     y = {'0':[1,2],'1':[3,4]}
 
