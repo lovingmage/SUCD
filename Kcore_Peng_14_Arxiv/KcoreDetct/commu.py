@@ -20,14 +20,21 @@
 	***MODIFIED by Rongqian Zhang Nov.18 2015	
 				   Chenghong Wang Dec. 20 2015 : Rewrite the graph read method.
 				   Chenghong Wang Jan. 5 2016 : Revised the community detection method by put all 
-												disconnect node of kcore into exclusive communities.
+	
+								disconnect node of kcore into exclusive communities.
+
+	***	MODIFIED by Hongyu Duan Mar.24 2016:
+						changed from writing log to txt to writing log to excel for better information collecting
 					
 '''
 
 import community
 import networkx as nx
 from collections import Counter
-
+import os
+import openpyxl
+from openpyxl import Workbook
+from openpyxl.cell import get_column_letter
 import time
 import sys
 
@@ -148,32 +155,59 @@ def detect_recover(filename,k):
 if __name__ == "__main__":
     #Read Network files as gml file type, create a networkx graph and use the eisted graph file
 	#Random graph may have poor performance, erdos renyi graph doesn't have true community structure
-    
-	#Start log file, create log file and start.
+    	
 	DATA_FILE = sys.argv[1].split("/")
-	FILE_LOG_NAME = "LOG_File_"+(DATA_FILE[-1])+ "_" + "without_kcore.log"
-	LOG_FILE = open(FILE_LOG_NAME,'w')
-	TEMP_INFO = 'Starting Community Detection Section on FILE: '+(sys.argv[1]) + "without kcore"
-	#print TEMP_INFO
-	LOG_FILE.write(TEMP_INFO)
-	LOG_FILE.write('\n')
+	FILE_LOG_NAME = "LOG_File_"+(DATA_FILE[-1])+ ".xlsx"
 	
-	#Kore_Value = int(sys.argv[1])
-	FILE_PATH = sys.argv[1]
+	#check if a log file already created, if not, create one to store infomration we needed for analysis
+        if(not os.path.exists(FILE_LOG_NAME)):
+                wb = openpyxl.Workbook()
+		sheet = wb.active
+                sheet.title = 'Sheet1'
+                sheet['A1'] = 'k_Value'
+                sheet['B1'] = 'StartTime'
+                sheet['C1'] = 'ParseFile'
+                sheet['D1'] = 'KcoreSearch'
+                sheet['E1'] = 'KcorePartition'
+                sheet['F1'] = 'KcoreRecover'
+                sheet['G1'] = 'Optimization'
+                sheet['H1'] = 'EndTime'
+                sheet['I1'] = 'TotalTime'
+                sheet['J1'] = 'NodesInKcore'
+                sheet['K1'] = 'Modularity'
+                sheet['L1'] = 'Ratio1'
+                sheet['M1'] = 'Ratio2'
+                sheet['N1'] = 'Ratio3'
+                sheet['O1'] = 'Ratio4'
+                sheet['P1'] = 'Ratio5'
+                wb.save(FILE_LOG_NAME)
 
+        #Open the log file to write data
+        wb = openpyxl.load_workbook(FILE_LOG_NAME)
+        sheet = wb.get_sheet_by_name('Sheet1')
+       
+	
+	FILE_PATH = sys.argv[1]
+	
+	#write current time to log file
+	sheet['B2'] = time.time() 
 	G = nx.read_edgelist(FILE_PATH)
-	LOG_FILE.write('Transaction: Parse External File Successful. \t')
-	LOG_FILE.write('Finish Time: %f' % time.time())
-	LOG_FILE.write('\n')
+
+	#wriet current time to log file
+	sheet['C2'] = time.time()
 
 	
 	partition = community.best_partition(G)
-	LOG_FILE.write('Transaction: Partition on graph Successful. \t')
-	LOG_FILE.write('Finish Time: %f' % time.time())
-	LOG_FILE.write('\n')
+	sheet['H2'] = time.time()
+	
+	#calculate the total time spend and write it to the log file
+	sheet['I2'] = sheet['H2'].value - sheet['B2'].value
 	print partition 
 	
 	#calculate the modularity
         mo = community.modularity(partition,G)
-        LOG_FILE.write('Modularity is: ' + str(mo))
-        LOG_FILE.write('\n')
+	sheet['K2'] = mo
+	
+	sheet['A2'] = "without kcore"	
+	#save the log file
+	wb.save(FILE_LOG_NAME)

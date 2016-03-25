@@ -23,15 +23,18 @@
 
 	***MODIFIED by Hongyu Duan Mar.3 2016: changed ratio part in function "vote_for_node" and write ratio data into log file
 			
-					
+	***MODIFIED by Hongyu Duan Mar.24 2016: changed log from writting to a txt to a excel file for better information collecting 				
 '''
 
 import community
 import networkx as nx
 from collections import Counter
-
+import os
 import time
 import sys
+import openpyxl
+from openpyxl import Workbook
+from openpyxl.cell import get_column_letter
 
 	
 #############################################################################################
@@ -176,49 +179,84 @@ if __name__ == '__main__':
 	#Start log file, create log file and start.
 	global ratio
 	DATA_FILE = sys.argv[1].split("/")
-	FILE_LOG_NAME = "LOG_File_"+ (DATA_FILE[-1]) + sys.argv[2] + ".log"
-	LOG_FILE = open(FILE_LOG_NAME,'w')
-	TEMP_INFO = 'Starting Community Detection Section on FILE: '+(sys.argv[1])+(' with k_core value of ') + (sys.argv[2])
-	#print TEMP_INFO
-	LOG_FILE.write(TEMP_INFO)
-	LOG_FILE.write('\n')
+	FILE_LOG_NAME = "LOG_File_"+ (DATA_FILE[-1]) + ".xlsx"
+
+	#check if a log file already created, if not, create one to store infomration we needed for analysis
+	if(not os.path.exists(FILE_LOG_NAME)):
+		wb = openpyxl.Workbook()
+		sheet = wb.active
+		sheet.title = 'Sheet1'
+		sheet['A1'] = 'k_Value'
+		sheet['B1'] = 'StartTime'
+		sheet['C1'] = 'ParseFile'
+		sheet['D1'] = 'KcoreSearch'
+		sheet['E1'] = 'KcorePartition'
+		sheet['F1'] = 'KcoreRecover'
+		sheet['G1'] = 'Optimization'
+		sheet['H1'] = 'EndTime'
+		sheet['I1'] = 'TotalTime'
+		sheet['J1'] = 'NodesInKcore'
+		sheet['K1'] = 'Modularity'
+		sheet['L1'] = 'Ratio1'
+		sheet['M1'] = 'Ratio2'
+		sheet['N1'] = 'Ratio3'
+		sheet['O1'] = 'Ratio4'
+		sheet['P1'] = 'Ratio5'
+		wb.save(FILE_LOG_NAME)
 	
-	Kore_Value = int(sys.argv[2])
+	#Open the log file to write data
+	wb = openpyxl.load_workbook(FILE_LOG_NAME)
+	sheet = wb.get_sheet_by_name('Sheet1')
+	
+
+	Kcore_Value = int(sys.argv[2])
+	sheet['A' + str(Kcore_Value + 3)] = Kcore_Value
+	
 	FILE_PATH = sys.argv[1]
-
+	#start to read data from file 
+	sheet['B' + str(Kcore_Value + 3)] = time.time()
 	G = nx.read_edgelist(FILE_PATH)
-	LOG_FILE.write('Transaction: Parse External File Successful. \t')
-	LOG_FILE.write('Finish Time: %f' % time.time())
-	LOG_FILE.write('\n')
-
+	sheet['C' + str(Kcore_Value + 3)] = time.time()
+	
+	#perform kcore search
 	H = nx.k_core (G, int(sys.argv[2]))
 	if (not H.nodes()):
-		LOG_FILE.write("The community with K of value: " + sys.argv[2] + " is empty; execution stopped")
+		sheet['J' + str(Kcore_Value + 3)] = "The community with K of value: " + sys.argv[2] + " is empty; execution stopped"
 		sys.exit(0)
-	LOG_FILE.write('Transaction: k-core Search Successful. \t')
-	LOG_FILE.write('Finish Time: %f' % time.time())
-	LOG_FILE.write('\n')
+	#record time
+	sheet['D' + str(Kcore_Value + 3)] = time.time()
 	
+	#perform partition on Kcore
 	partition = community.best_partition(H)
-	LOG_FILE.write('Transaction: Partition on K-core Successful. \t')
-	LOG_FILE.write('Finish Time: %f' % time.time())
-	LOG_FILE.write('\n')
-	#print partition 
+	#record time
+	sheet['E' + str(Kcore_Value + 3)] = time.time()
+	
 	
 	sorted_recover_nodes = sort_by_neighbor(H, G)
+	print len(sorted_recover_nodes)
 	new_partition = vote_for_node(partition, sorted_recover_nodes, G)
-	#cov_partition = convert_partition_format(new_partition) 
+	sheet['F' + str(Kcore_Value + 3)] = time.time()
+
+	#write current time to log, for the calculation of total time
+	sheet['H' + str(Kcore_Value + 3)] = time.time()
 	print new_partition 
-	LOG_FILE.write('Transaction: Recovery Process Successful. \t')
-	LOG_FILE.write('Finish Time: %f' % time.time())
-	LOG_FILE.write('\n')
 
-	#calculate the modularity
+	#calculate the total time spend and write it to the log file
+	sheet['I' + str(Kcore_Value + 3)] = sheet['H' + str(Kcore_Value + 3)].value - sheet['B' + str(Kcore_Value + 3)].value
+	
+	#write the number of nodes in kcore into log file
+	sheet['J' + str(Kcore_Value + 3)] = H.number_of_nodes()
+
+	#write modularity of the partitions into log file
 	mo = community.modularity(new_partition,G)
-        LOG_FILE.write('Modularity is: ' + str(mo))
-        LOG_FILE.write('\n')
-	#ratioContent = "ratio1:" + str(ratio[0]) + "ratio2:" + str(ratio[1]) + "ratio3:" + str(ratio[2]) + "ratio4:" + str(ratio[3]) + "ratio5:" + str(ratio[4])
-	LOG_FILE.write("# of node with ratio of neighbor equals 0 is: " + str(ratio[0]) + '\n' + "# of node with ratio of neighbor in (0-0.3] is : " + str(ratio[1]) + '\n' + "# of node with ratio of neighbor in (0.3,0.5] is: " + str(ratio[2]) + '\n' + "# of node with ratio of neighbor in (0.5, 0.75] is: "  + str(ratio[3]) +'\n' + "# of node with ratio of neighbor in (0.75,1] is: " + str(ratio[4]))
+	sheet['K' + str(Kcore_Value + 3)] = mo
 
-	LOG_FILE.write('\n')
+	#write number of nodes in each ration range into log file
+	sheet['L' + str(Kcore_Value + 3)] = ratio[0]
+	sheet['M' + str(Kcore_Value + 3)] = ratio[1]
+	sheet['N' + str(Kcore_Value + 3)] = ratio[2]
+	sheet['O' + str(Kcore_Value + 3)] = ratio[3]
+	sheet['P' + str(Kcore_Value + 3)] = ratio[4]
+	wb.save(FILE_LOG_NAME)
+	
 
