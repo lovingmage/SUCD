@@ -252,11 +252,11 @@ if __name__ == '__main__':
 	sheet['K' + str(Kcore_Value + 3)] = mo
 
 	#write number of nodes in each ration range into log file
-	sheet['L' + str(Kcore_Value + 3)] = ratio[0]
-	sheet['M' + str(Kcore_Value + 3)] = ratio[1]
+	sheet['L' + str(Kcore_Value + 3)] = ratio[4]
+	sheet['M' + str(Kcore_Value + 3)] = ratio[3]
 	sheet['N' + str(Kcore_Value + 3)] = ratio[2]
-	sheet['O' + str(Kcore_Value + 3)] = ratio[3]
-	sheet['P' + str(Kcore_Value + 3)] = ratio[4]
+	sheet['O' + str(Kcore_Value + 3)] = ratio[1]
+	sheet['P' + str(Kcore_Value + 3)] = ratio[0]
 	wb.save(FILE_LOG_NAME)
 	
 
