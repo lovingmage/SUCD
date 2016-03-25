@@ -180,6 +180,7 @@ if __name__ == "__main__":
                 sheet['N1'] = 'Ratio3'
                 sheet['O1'] = 'Ratio4'
                 sheet['P1'] = 'Ratio5'
+		sheet['Q1'] = 'Similarity'
                 wb.save(FILE_LOG_NAME)
 
         #Open the log file to write data

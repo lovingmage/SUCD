@@ -202,6 +202,7 @@ if __name__ == '__main__':
 		sheet['N1'] = 'Ratio3'
 		sheet['O1'] = 'Ratio4'
 		sheet['P1'] = 'Ratio5'
+		sheet['Q1'] = 'Similarity'
 		wb.save(FILE_LOG_NAME)
 	
 	#Open the log file to write data
@@ -233,7 +234,6 @@ if __name__ == '__main__':
 	
 	
 	sorted_recover_nodes = sort_by_neighbor(H, G)
-	print len(sorted_recover_nodes)
 	new_partition = vote_for_node(partition, sorted_recover_nodes, G)
 	sheet['F' + str(Kcore_Value + 3)] = time.time()
 
