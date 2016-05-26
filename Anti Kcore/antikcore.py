@@ -2,6 +2,8 @@ import networkx as nx
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import community
+import json
 
 def anti_kcore(G, k = None, core_number = None):
     if core_number is None:
@@ -15,12 +17,12 @@ def anti_kcore(G, k = None, core_number = None):
 	
     
 if __name__ == "__main__":
-    FILE_PATH = "./test.txt"
+    FILE_PATH = "./grad_edges"
     G = nx.read_edgelist(FILE_PATH)
     
     '''Set Upper Bound Graph Scale'''
     node_size ={0.1, 0.2, 0.3, 0.4, 0.5, 0.6}
-    upper_bound = int(0.2 * len(G.nodes()))
+    upper_bound = int(0.8 * len(G.nodes()))
     #print upper_bound
     
     
@@ -44,14 +46,20 @@ if __name__ == "__main__":
         G1 = H
         resi_node = resi_node + temp
         
-    
-    print len(G.nodes())
+
     M = G.subgraph(resi_node).copy()
     
-    print len(M.nodes())
+    partition = community.best_partition(M)
+    outPartition = json.dumps(partition)  
+    json.dump(outPartition, open('0.8.dat', 'w'))
     
-    nx.draw_spring(M)
-    plt.savefig('dl0-2')
+
+    values = [partition.get(node) for node in M.nodes()]
+
+    nx.draw_spring(M, cmap = plt.get_cmap('jet'), node_color = values, node_size=50, with_labels=False)    
+    
+    #nx.draw_spring(M, node_size=50, with_labels=False)
+    plt.savefig('c-dl8')
 
     
  
