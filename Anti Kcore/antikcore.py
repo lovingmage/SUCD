@@ -14,30 +14,8 @@ def anti_kcore(G, k = None, core_number = None):
     anti_nodes = (n for n in core_number if core_number[n] < k)
     return (G.subgraph(anti_nodes).copy(), list(nodes))
 	
-	
-    
-if __name__ == "__main__":
-    FILE_PATH = "./grad_edges"
-    G = nx.read_edgelist(FILE_PATH)
-    
-    '''Set Upper Bound Graph Scale'''
-    node_size ={0.1, 0.2, 0.3, 0.4, 0.5, 0.6}
-    upper_bound = int(0.8 * len(G.nodes()))
-    #print upper_bound
-    
-    
-    #nx.draw_spring(G)
-    #plt.savefig('origin')
-    
-    '''
-    (H, temp) = anti_kcore(G)
-    M = G.subgraph(temp)
-    
-    nx.draw_spring(M)
-    plt.savefig('dl2')
-    '''
-    
-    
+ 
+def resi_core(G):
     resi_node = []
     G1 = G
       
@@ -46,9 +24,21 @@ if __name__ == "__main__":
         G1 = H
         resi_node = resi_node + temp
         
-
-    M = G.subgraph(resi_node).copy()
+    return G.subgraph(resi_node).copy()
+     
+	
     
+if __name__ == "__main__":
+    FILE_PATH = "./dolphin.txt"
+    G = nx.read_edgelist(FILE_PATH)
+    
+    '''Set Upper Bound Graph Scale'''
+    node_size ={0.1, 0.2, 0.3, 0.4, 0.5, 0.6}
+    upper_bound = int(0.8 * len(G.nodes()))
+    #print upper_bound
+    
+    
+    M = resi_core(G)
     partition = community.best_partition(M)
     outPartition = json.dumps(partition)  
     json.dump(outPartition, open('0.8.dat', 'w'))
