@@ -20,12 +20,13 @@ if __name__ == '__main__':
 	FILE1 = sys.argv[1]
 	FILE2 = sys.argv[2]
 	upperbound = int(sys.argv[3])
+	LOG_FILE = sys.argv[4]
 	original = {}
 	kcore = []
 
 	conv = {1:'B',2:'C',3:'D',4:'E',5:'F',6:'G',7:'H',8:'I',9:'J',10:'K'}
 
-	if(not os.path.exists("FILE_LOG.xlsx")):
+	if(not os.path.exists(LOG_FILE+".xlsx")):
 		wb = openpyxl.Workbook()
 
 		sheet = wb.active
@@ -56,7 +57,7 @@ if __name__ == '__main__':
 		sheet['A14'] = 'Community11'
 	
 	else:
-		wb = openpyxl.load_workbook("FILE_LOG.xlsx")
+		wb = openpyxl.load_workbook(LOG_FILE+".xlsx")
 		sheet = wb.get_sheet_by_name('Sheet1')
 	
 	with open(FILE1) as fd1:
@@ -84,4 +85,4 @@ if __name__ == '__main__':
 		sheet[conv[upperbound] + str(key + 3)] = (count*1.0)/((deno*1.0))	
 
 
-	wb.save("FILE_LOG.xlsx")
+	wb.save(LOG_FILE+".xlsx")

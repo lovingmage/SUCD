@@ -9,10 +9,11 @@ import community
 import networkx as nx
 import matplotlib.pyplot as plt
 import json
-
+import sys
 #better with karate_graph() as defined in networkx example.
 #erdos renyi don't have true community structure
-FILE_PATH = "./grad_edges"
+
+FILE_PATH = sys.argv[1]
 G = nx.read_edgelist(FILE_PATH)
 
 #first compute the best partition

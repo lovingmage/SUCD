@@ -33,9 +33,9 @@ if __name__ == "__main__":
     FILE_PATH = sys.argv[1]
     
     G = nx.read_edgelist(FILE_PATH)
-    node_size = sys.argv[2]
+    node_size = int(sys.argv[2])
     '''Set Upper Bound Graph Scale'''
-    upper_bound = int(node_size * len(G.nodes()))
+    upper_bound = int(0.1 * node_size * len(G.nodes()))
     
     
     M = resi_core(G)
