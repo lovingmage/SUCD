@@ -73,12 +73,15 @@ if __name__ == '__main__':
 
 	for key in reverseDict:
 		count = 0
+		deno = 0
+		
 		for v in reverseDict[key]:
+			deno = deno + 1
 			if(v in kcore):
 				count = count + 1
 	
 
-		sheet[conv[upperbound] + str(key + 3)] = count	
+		sheet[conv[upperbound] + str(key + 3)] = (count*1.0)/((deno*1.0))	
 
 
 	wb.save("FILE_LOG.xlsx")
