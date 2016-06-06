@@ -30,12 +30,12 @@ def resi_core(G):
 	
     
 if __name__ == "__main__":
-    FILE_PATH = "./dolphin.txt"
-    G = nx.read_edgelist(FILE_PATH)
+    FILE_PATH = sys.argv[1]
     
+    G = nx.read_edgelist(FILE_PATH)
+    node_size = int(sys.argv[2])
     '''Set Upper Bound Graph Scale'''
-    node_size ={0.1, 0.2, 0.3, 0.4, 0.5, 0.6}
-    upper_bound = int(0.8 * len(G.nodes()))
+    upper_bound = int(0.1 * node_size * len(G.nodes()))
     
     
     M = resi_core(G)
@@ -65,9 +65,9 @@ if __name__ == "__main__":
 
     partition = community.best_partition(M)
     for key in partition.keys():
-	print key  
+		print key  
  
-    outPartition = json.dumps(partition)  
+    '''outPartition = json.dumps(partition)  
     json.dump(outPartition, open(sys.argv[1]+".dat", 'w'))
     
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     nx.draw_spring(M, cmap = plt.get_cmap('jet'), node_color = values, node_size=50, with_labels=False)    
     
     #nx.draw_spring(M, node_size=50, with_labels=False)
-    plt.savefig('c-dl' + sys.argv[1])
+    plt.savefig('c-dl' + sys.argv[1])'''
 
     
  
