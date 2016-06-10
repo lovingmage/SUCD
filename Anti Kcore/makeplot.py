@@ -28,6 +28,7 @@ if __name__ == '__main__':
 
 	conv = {1:'B',2:'C',3:'D',4:'E',5:'F',6:'G',7:'H',8:'I',9:'J',10:'K'}
 
+<<<<<<< HEAD
 	with open(FILE1) as fd1:
 		original = eval(fd1.readline())
 
@@ -37,6 +38,8 @@ if __name__ == '__main__':
 	kcore = [line.rstrip('\n\r') for line in open(FILE2)]
 	lable_list = []
 	
+=======
+>>>>>>> master
 	if(not os.path.exists(LOG_FILE+".xlsx")):
 		wb = openpyxl.Workbook()
 
@@ -103,14 +106,22 @@ if __name__ == '__main__':
 	'''for key in reverseDict:
 		count = 0
 		deno = 0
+<<<<<<< HEAD
 		
+=======
+		print key
+>>>>>>> master
 		for v in reverseDict[key]:
 			deno = deno + 1
 			if(v in kcore):
 				count = count + 1
 	
 
+<<<<<<< HEAD
 		sheet[conv[upperbound] + str(key + 3)] = (count*1.0)/((deno*1.0))	'''
+=======
+		sheet[conv[upperbound] + str(key + 3)] = (count*1.0)/((deno*1.0))	
+>>>>>>> master
 
 
 	wb.save(LOG_FILE+".xlsx")
