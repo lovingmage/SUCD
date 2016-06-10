@@ -5,7 +5,6 @@ import os
 import openpyxl
 import collections
 from openpyxl import Workbook
-#from openpyxl.cell import get_column_letter
 from openpyxl.utils import get_column_letter
 import numpy as np
 
@@ -28,7 +27,6 @@ if __name__ == '__main__':
 
 	conv = {1:'B',2:'C',3:'D',4:'E',5:'F',6:'G',7:'H',8:'I',9:'J',10:'K'}
 
-<<<<<<< HEAD
 	with open(FILE1) as fd1:
 		original = eval(fd1.readline())
 
@@ -38,8 +36,6 @@ if __name__ == '__main__':
 	kcore = [line.rstrip('\n\r') for line in open(FILE2)]
 	lable_list = []
 	
-=======
->>>>>>> master
 	if(not os.path.exists(LOG_FILE+".xlsx")):
 		wb = openpyxl.Workbook()
 
@@ -61,29 +57,11 @@ if __name__ == '__main__':
 		
 		for i in range(number_of_community):
 			sheet['A'+str(i+3)] = 'Community' + str(i)
-		'''sheet['A3'] = 'Community0'
-		sheet['A4'] = 'Community1'
-		sheet['A5'] = 'Community2'
-		sheet['A6'] = 'Community3'
-		sheet['A7'] = 'Community4'
-		sheet['A8'] = 'Community5'
-		sheet['A9'] = 'Community6'
-		sheet['A10'] = 'Community7'
-		sheet['A11'] = 'Community8'
-		sheet['A12'] = 'Community9'
-		sheet['A13'] = 'Community10'
-		sheet['A14'] = 'Community11'''
 	
 	else:
 		wb = openpyxl.load_workbook(LOG_FILE+".xlsx")
 		sheet = wb.get_sheet_by_name('Sheet1')
 	
-	'''with open(FILE1) as fd1:
-		original = eval(fd1.readline())
-
-	originalDict = collections.OrderedDict(sorted(original.items()))	
-
-	kcore = [line.rstrip('\n') for line in open(FILE2)]'''
 
 #total number of nodes in kcore/resilence core
 
@@ -102,26 +80,6 @@ if __name__ == '__main__':
 	
 	for key in range(number_of_community):
 		sheet[conv[upperbound] + str(key+3)] = (int(node_count_core[key]) * 1.0) / (int(len(reverseDict[key]) * 1.0))
-
-	'''for key in reverseDict:
-		count = 0
-		deno = 0
-<<<<<<< HEAD
-		
-=======
-		print key
->>>>>>> master
-		for v in reverseDict[key]:
-			deno = deno + 1
-			if(v in kcore):
-				count = count + 1
-	
-
-<<<<<<< HEAD
-		sheet[conv[upperbound] + str(key + 3)] = (count*1.0)/((deno*1.0))	'''
-=======
-		sheet[conv[upperbound] + str(key + 3)] = (count*1.0)/((deno*1.0))	
->>>>>>> master
 
 
 	wb.save(LOG_FILE+".xlsx")
