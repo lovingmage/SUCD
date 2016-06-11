@@ -79,7 +79,7 @@ if __name__ == '__main__':
 	reverseDict = reverseDict(originalDict)
 	
 	for key in range(number_of_community):
-		sheet[conv[upperbound] + str(key+3)] = (int(node_count_core[key]) * 1.0) / (int(len(reverseDict[key]) * 1.0))
+		sheet[conv[upperbound] + str(key+3)] = str(node_count_core[key]) + ", " + str((int(node_count_core[key]) * 1.0) / (int(len(reverseDict[key]) * 1.0)))
 
 
 	wb.save(LOG_FILE+".xlsx")
