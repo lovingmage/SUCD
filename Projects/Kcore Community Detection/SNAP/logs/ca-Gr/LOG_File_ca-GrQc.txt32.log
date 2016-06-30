@@ -1,0 +1,6 @@
+Starting Community Detection Section on FILE [ ./Dataset/ca-GrQc.txt ] with k_core value 32
+Transaction: Parse External File Successful. 	Finish Time: 1453477638.304611
+Transaction: k-core Search Successful. 	Finish Time: 1453477638.326653
+Transaction: Partition on K-core Successful. 	Finish Time: 1453477638.388115
+Transaction: Recovery Process Successful. 	Finish Time: 1453477638.428864
+Total time used. 	Total Time: 0.124253

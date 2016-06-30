@@ -1,6 +1,0 @@
-Starting Community Detection Section on FILE [ ./Dataset/email-Enron.txt ] with k_core value 38
-Transaction: Parse External File Successful. 	Finish Time: 1453483827.968860
-Transaction: k-core Search Successful. 	Finish Time: 1453483828.124363
-Transaction: Partition on K-core Successful. 	Finish Time: 1453483828.920589
-Transaction: Recovery Process Successful. 	Finish Time: 1453483829.693619
-Total time used. 	Total Time: 1.724759
