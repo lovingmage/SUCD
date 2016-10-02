@@ -1,24 +1,20 @@
 '''
- code is designed and written by Chenghong Wang.
-   Do not copy, disclose, or distribute without explicit written permission.
+	Script designed and written by Chenghong Wang.
+	Do not copy, disclose, or distribute without explicit written permission.
 
-   Author:                      Chenghong Wang <cwang132@syr.edu>
+	Author:                      Chenghong Wang <cwang132@syr.edu>
 
-   Instruction:                 This program is a python package which is designed to calculate the eigenvalues
+	Instruction:
+				This program is a python package which is designed to calculate the eigenvalues
 				when perform community detection. It also support Laplacian Matrix generation and
 				Normalized Laplacian Matrix generation. The method used for computing the eigenvalues
 				contain two method, one is offered by NumPy and another is PowerIteration. The NumPy 
 				offered method can compute all eigenvalues of given matrix and all corresponding eigen-
 				vectors. The power iteration method only return the dominant eigenvalus.
 
-        Usage:                  This is a package of kcore community detection, to use all function here, by
-                                using :
+	Usage:                  This is a package of kcore community detection, to use all function here, by
+							using :
 
-                                        In Linux Command Line using the following command
-
-                                        $python kcore_comm.py [INPUT_FILE_TYPE] [Kcore Number]
-
-        
 '''
 import numpy
 import random

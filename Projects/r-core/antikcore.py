@@ -111,21 +111,27 @@ def resi_subgraph(G, upper_bound):
     
 #<------------Test Stub------------>
 if __name__ == "__main__":
-    FILE_PATH = sys.argv[1]
+    FILE_PATH = "./data/DBLP_edges"
     
     G = nx.read_edgelist(FILE_PATH)
-    node_size = int(sys.argv[2])
+    #node_size = int(sys.argv[2])
     '''Set Upper Bound Graph Scale'''
-    upper_bound = int(0.1 * node_size * len(G.nodes()))
+    upper_bound = int(0.6 * 1 * len(G.nodes()))
     
     ## Test The minimal resicore
     #M, l1 = anti_kcore(G)
     #print l1
-    
+    from time import clock
+    start=clock()
 
     M = resi_subgraph(G, upper_bound)
-
+    
+    
+    finish=clock()
+    print (finish-start)/10000
+    
+'''
     partition = community.best_partition(M)
     for key in partition.keys():
 		print key  
-    
+ '''   

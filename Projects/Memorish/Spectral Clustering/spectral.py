@@ -36,16 +36,24 @@ if __name__ == "__main__":
         
     G = nx.read_edgelist(FILE_PATH)
         
+	''' Clustering using the computed eigenvectors '''
+	#Generate laplacian matrix and calculate eigenvectors by software mode
     Lap = gen_laplacian(G, 2)
     w, v = LA.eig(Lap.todense())
     save_eigen(w, v, FILE_PATH)
-        
+    #Clustering using the output eigenvectors
     feature_matrix = np.transpose(v)
     partition_orig = KMeans(n_clusters=int(pre_clus)).fit(feature_matrix)
         
+	''' Clustering using External Eigenvectors '''	
+	#Load the Eigenvectors from outside file, using argv3
     ext_matrix = np.genfromtxt (eigv_path, delimiter=",")
+	#Make partition on using the external eigenvectors
     feature_ext_matrix = np.transpose(ext_matrix)
     partition_fast = KMeans(n_clusters = int(pre_clus)).fit(feature_ext_matrix)
+	
+	
+	''' Print the Result to Calculate the Error and Result '''
     print partition_orig.inertia_
     print jaccard_similarity_score(partition_orig.labels_, partition_fast.labels_)
     print normalized_mutual_info_score(partition_orig.labels_, partition_fast.labels_)
