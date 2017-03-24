@@ -1,7 +1,7 @@
-function [ temp, e, t] = evfinder(V_s, V_step) %
+function [ log_tmp, temp, e, t] = evfinder(V_s, V_step) %
 % A = csvread('matrix.csv');
-load 'BAedges.mat';
-A = full(out);
+load 'matlab.mat';
+%A = full(out);
 tic();
 %n = size(A,1);
 %A = randn(60)
@@ -10,23 +10,22 @@ V_times = V_s/V_step;
 % f_s = 0;
 temp = V_s;
 mm = 0;
-%log_tmp = zeros(V_times, 1)
+log_tmp = zeros(V_times, 1)
 
 for k =1:V_times
     x = evb(A, temp);
-    m = max(max(x), abs(min(x))); 
-    %log_tmp(k) = 1/m
-    if (m>mm)
-        mm = m;
-        %if (mm >= c_max)
-            %f_s = 1;
-        %end
-    else
-        %if(f_s == 1)
-        %vec = x;
-        break;
-        %end
-    end
+    log_tmp(k) = sum(x)/norm(x)
+%     if (m>mm)
+%         mm = m;
+%         %if (mm >= c_max)
+%             %f_s = 1;
+%         %end
+%     else
+%         %if(f_s == 1)
+%         %vec = x;
+%         break;
+%         %end
+%    end
     temp = temp - V_step;
 end
 t = toc();

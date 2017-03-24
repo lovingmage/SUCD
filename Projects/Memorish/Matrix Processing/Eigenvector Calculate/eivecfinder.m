@@ -2,7 +2,7 @@ function [ eigenvs, temp, e, t] = eivecfinder( V_s, V_step )
 %EIVECFINDER Summary of this function goes here
 %   Detailed explanation goes here
 % A = csvread('matrix.csv');
-load 'matlab.mat';
+load 'matlab.mat'; 
 %A = full(out);
 %format long e
 N = size(A,1);
