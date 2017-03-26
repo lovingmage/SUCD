@@ -15,6 +15,7 @@ temp = V_s;
 mm = 0;
 eigenvs = [];
 eindex = 1;
+tic();
 for k =1:V_times
     x = evb(A, temp);
     %m = max(max(x), abs(min(x))); 
@@ -34,7 +35,8 @@ for k =1:V_times
 
     temp = temp - V_step;
 end
-tic();
+t = toc();
+
 e= max(eig(A));
 %disp(e);
 % Ph = A - diag(ones(N,1) * temp);
@@ -43,6 +45,6 @@ e= max(eig(A));
 % Ps = A - diag(ones(N,1) * e);
 % ev = linsolve(Ps, zeros(N,1));
 
-t = toc();
+
 end
 

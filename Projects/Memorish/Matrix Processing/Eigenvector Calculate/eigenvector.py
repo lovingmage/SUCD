@@ -9,6 +9,7 @@ import numpy as np
 import scipy.io
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy import sparse
+import time
 
 
 '''
@@ -57,7 +58,7 @@ def inverse_power(E):
     #print similarities
     
     count = 0
-    while (similarities[0][1] < 0.9999999999999999999995):
+    while (similarities[0][1] < 0.9999999995):
         w0 = w
         
         w = np.linalg.solve(E, r)
@@ -68,17 +69,41 @@ def inverse_power(E):
         count = count + 1
         
     return w, count
-        
-        
-# Start Function
+    
+    
 
-PATH = 'matlab.mat'
+def matrix_deflation(A, eigenval, eigenvec):
+     
+    eigenvec_transpose = np.transpose(eigenvec)
+    eigenvec_mat = np.multiply(eigenvec, eigenvec_transpose)
+    norm = np.linalg.norm(eigenvec)
+    defla_matrix = A - np.multiply(eigenval, np.divide(eigenvec_mat, norm))
+    
+    return defla_matrix
+        
+        
+PATH = 'bay.mat'
+x = scipy.io.loadmat(PATH)
+A = x['A']
+eigenv_start = time.time()
 E, eigen_a, eigev = initialize_linear_equation(PATH)
 w, c = inverse_power(E)
 M =  np.array([w, eigev])
+eigenv_end = time.time()
+print(eigenv_end - eigenv_start)
+
 M_sparse = sparse.csr_matrix(M)
 similarities = cosine_similarity(M)
-print similarities
+#print similarities
+
+start = time.time()
+deflation = matrix_deflation(A, E, w)
+end = time.time()
+
+print(end - start)
+
+
+
 
 
 

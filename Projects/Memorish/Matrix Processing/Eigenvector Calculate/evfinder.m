@@ -1,6 +1,6 @@
 function [ log_tmp, temp, e, t] = evfinder(V_s, V_step) %
 % A = csvread('matrix.csv');
-load 'matlab.mat';
+load 'bay.mat';
 %A = full(out);
 tic();
 %n = size(A,1);
