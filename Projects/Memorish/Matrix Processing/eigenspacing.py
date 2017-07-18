@@ -10,17 +10,19 @@ from numpy import linalg as LA
 import matplotlib.pyplot as plt
 import networkx as nx
 
-def statistic_random_matrix(mat_size, REPS, sample_percent):
+def statistic_random_matrix(mat_size, REPS):
     matrix_size = mat_size
     record_dict = {}
 
     for j in range(1, REPS, 1):
         random_matrix = np.random.randint(2, size = (matrix_size, matrix_size))
         w, v = LA.eig(random_matrix)
+        w = np.sort(w)
+        w = w[::-1]
 
-        for i in range(1, int(sample_percent * matrix_size), 1):
+        for i in range(1, matrix_size - 1, 1):
             if w[i] > 0:
-                eigen_spacing = np.absolute(w[i] - w[i+1])
+                eigen_spacing = w[i] - w[i+1]
                 record_dict[w[i]] = eigen_spacing
         
 #sorted_data = sorted(record_dict.items(), key=lambda items: items[1])
@@ -79,12 +81,15 @@ def eigen_spacing_distribution(mat):
 
 def statistic_matrix(mat):
     w, v = LA.eig(mat)
-    record_dict = {}
+    w = np.sort(w)
+    w = w[::-1]
     
+    record_dict = {}
+
     eigen_size = w.size
     for i in range(0, eigen_size - 1, 1):
         if w[i] > 0:
-            eigen_spacing = np.absolute(w[i] - w[i+1])
+            eigen_spacing = w[i] - w[i+1]
             record_dict[w[i]] = eigen_spacing
         
 
@@ -144,33 +149,13 @@ if __name__ == "__main__":
             "ca-AstroPh.txt",
             "ca-CondMat.txt",
             "ca-HepPh.txt",
-            "email-Enron.txt"]
+            "email-Enron.txt",
+            "facebook_combined.txt"]
     
     file_name = "/Users/lovingmage/Downloads/data/" + file_list[-1]
     G=nx.read_edgelist(file_name)
-    #npmat = nx.to_numpy_matrix(G, G.nodes())
+    npmat = nx.to_numpy_matrix(G, G.nodes())
+    statistic_matrix(npmat)
     
-    npmat = rd_eigen_spacing_distribution(1000, 10)
-    #eigen_spacing_plots(npmat, file_list[-1])
-    
-    plt.hist(eigenspacings, bins = 100)
-    plt.ylabel("eigenspacing counts")
-    plt.xlabel("eigenspacing")
-    tittle = "Eigenspacing_Distribution_of_" + file_name
-    plt.title(tittle)
-    plt.show()
-
-    
-    plt.hist(eigenspacings, bins=100, normed=True, cumulative=True)
-    plt.ylabel("eigenspacing counts")
-    plt.xlabel("eigenspacing")
-    tittle = "Cumulative Distribution of " + file_name
-    plt.title(tittle)
-    plt.show()
-    '''
-    eigspacs = eigen_spacing_distribution(npmat)
-
-
-    '''
-    
-    
+    #statistic_random_matrix(1000,10)
+   
