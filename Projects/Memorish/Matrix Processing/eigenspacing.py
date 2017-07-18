@@ -139,24 +139,34 @@ def eigen_spacing_plots(mat, file_name):
     
 if __name__ == "__main__":
     file_list=[
-            "facebook_combined.txt", 
-            "com-amazon.all.dedup.cmty.txt", 
-            "email-Enron.txt", 
             "com-amazon.ungraph.txt", 
             "com-dblp.ungraph.txt",
             "ca-AstroPh.txt",
             "ca-CondMat.txt",
-            "ca-GrQc.txt",
             "ca-HepPh.txt",
-            "ca-HepTh.txt",
             "email-Enron.txt"]
     
-    file_name = "/Users/lovingmage/Downloads/data/" + file_list[9]
+    file_name = "/Users/lovingmage/Downloads/data/" + file_list[-1]
     G=nx.read_edgelist(file_name)
-    npmat = nx.to_numpy_matrix(G, G.nodes())
+    #npmat = nx.to_numpy_matrix(G, G.nodes())
     
-    eigen_spacing_plots(npmat, file_list[9])
+    npmat = rd_eigen_spacing_distribution(1000, 10)
+    #eigen_spacing_plots(npmat, file_list[-1])
     
+    plt.hist(eigenspacings, bins = 100)
+    plt.ylabel("eigenspacing counts")
+    plt.xlabel("eigenspacing")
+    tittle = "Eigenspacing_Distribution_of_" + file_name
+    plt.title(tittle)
+    plt.show()
+
+    
+    plt.hist(eigenspacings, bins=100, normed=True, cumulative=True)
+    plt.ylabel("eigenspacing counts")
+    plt.xlabel("eigenspacing")
+    tittle = "Cumulative Distribution of " + file_name
+    plt.title(tittle)
+    plt.show()
     '''
     eigspacs = eigen_spacing_distribution(npmat)
 
