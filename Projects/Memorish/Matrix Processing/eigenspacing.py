@@ -15,7 +15,8 @@ def statistic_random_matrix(mat_size, REPS):
     record_dict = {}
 
     for j in range(1, REPS, 1):
-        random_matrix = np.random.randint(2, size = (matrix_size, matrix_size))
+        #random_matrix = np.random.randint(2, size = (matrix_size, matrix_size))
+        random_matrix = np.random.rand(matrix_size, matrix_size)
         w, v = LA.eig(random_matrix)
         w = np.sort(w)
         w = w[::-1]
@@ -28,6 +29,12 @@ def statistic_random_matrix(mat_size, REPS):
 #sorted_data = sorted(record_dict.items(), key=lambda items: items[1])
 
     plt.plot(record_dict.keys(), record_dict.values(), 'rx', markersize = 3.3)
+    plt.yscale('log')
+    plt.xscale('log')
+    plt.ylabel("associated eigenspacing")
+    plt.xlabel("eigenvalue")
+    tittle = "eigenvalue v.s. associated eigenspacing " + "matrix size " + str(mat_size)
+    plt.title(tittle)
     plt.show()
     
     
@@ -79,7 +86,7 @@ def eigen_spacing_distribution(mat):
     plt.show()
     
 
-def statistic_matrix(mat):
+def statistic_matrix(mat, fname):
     w, v = LA.eig(mat)
     w = np.sort(w)
     w = w[::-1]
@@ -94,9 +101,12 @@ def statistic_matrix(mat):
         
 
     plt.plot(record_dict.keys(), record_dict.values(), 'rx', markersize = 3.3)
+    plt.yscale('log')
+    plt.xscale('log')
+    
     plt.ylabel("associated eigen_spacing")
     plt.xlabel("eigv")
-    tittle = "eigv v.s. associated eigen_spacing"
+    tittle = "eigv v.s. associated eigen_spacing " + fname
     plt.title(tittle)
     plt.show()
     
@@ -149,13 +159,15 @@ if __name__ == "__main__":
             "ca-AstroPh.txt",
             "ca-CondMat.txt",
             "ca-HepPh.txt",
+            "ca-GrQc.txt",
+            "ca-HepTh.txt",
             "email-Enron.txt",
             "facebook_combined.txt"]
     
-    file_name = "/Users/lovingmage/Downloads/data/" + file_list[-1]
-    G=nx.read_edgelist(file_name)
-    npmat = nx.to_numpy_matrix(G, G.nodes())
-    statistic_matrix(npmat)
+    file_name = "/Users/lovingmage/Downloads/data/" + file_list[5]
+    #G=nx.read_edgelist(file_name)
+    #npmat = nx.to_numpy_matrix(G, G.nodes())
+    #statistic_matrix(npmat, file_list[5])
     
-    #statistic_random_matrix(1000,10)
+    statistic_random_matrix(1000,2)
    
