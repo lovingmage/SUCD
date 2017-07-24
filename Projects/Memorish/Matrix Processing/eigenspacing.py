@@ -9,6 +9,7 @@ import numpy as np
 from numpy import linalg as LA
 import matplotlib.pyplot as plt
 import networkx as nx
+import scipy.sparse as sparse
 
 def statistic_random_matrix(mat_size, REPS):
     matrix_size = mat_size
@@ -87,7 +88,7 @@ def eigen_spacing_distribution(mat):
     
 
 def statistic_matrix(mat, fname):
-    w, v = LA.eig(mat)
+    w, v = sparse.linalg.eigsh(mat, k=100)
     w = np.sort(w)
     w = w[::-1]
     
@@ -99,10 +100,11 @@ def statistic_matrix(mat, fname):
             eigen_spacing = w[i] - w[i+1]
             record_dict[w[i]] = eigen_spacing
         
-
+    #print record_dict
+    del record_dict[min(record_dict.keys())]
     plt.plot(record_dict.keys(), record_dict.values(), 'rx', markersize = 3.3)
-    plt.yscale('log')
-    plt.xscale('log')
+    #plt.yscale('log')
+    #plt.xscale('log')
     
     plt.ylabel("associated eigen_spacing")
     plt.xlabel("eigv")
@@ -162,12 +164,16 @@ if __name__ == "__main__":
             "ca-GrQc.txt",
             "ca-HepTh.txt",
             "email-Enron.txt",
-            "facebook_combined.txt"]
+            "facebook_combined.txt",
+            "adjnoun.txt",
+            "dolphins.txt",
+            "netscience.txt",
+            "power.txt"]
     
-    file_name = "/Users/lovingmage/Downloads/data/" + file_list[5]
-    #G=nx.read_edgelist(file_name)
-    #npmat = nx.to_numpy_matrix(G, G.nodes())
-    #statistic_matrix(npmat, file_list[5])
+    file_name = "/Users/lovingmage/Downloads/data/" + file_list[7]
+    G=nx.read_edgelist(file_name)
+    npmat = nx.to_numpy_matrix(G, G.nodes())
+    statistic_matrix(npmat, file_list[7])
     
-    statistic_random_matrix(1000,2)
+    #statistic_random_matrix(1000,2)
    
