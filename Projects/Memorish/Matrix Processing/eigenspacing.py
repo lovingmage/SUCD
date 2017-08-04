@@ -87,15 +87,15 @@ def eigen_spacing_distribution(mat):
     plt.show()
     
 
-def statistic_matrix(mat, fname):
-    w, v = sparse.linalg.eigsh(mat, k=100)
+def statistic_matrix(mat, fname, mode):
+    w, v = sparse.linalg.eigsh(mat, k=300)
     w = np.sort(w)
     w = w[::-1]
     
     record_dict = {}
 
     eigen_size = w.size
-    for i in range(0, eigen_size - 1, 1):
+    for i in range(mode, eigen_size - 1, 1):
         if w[i] > 0:
             eigen_spacing = w[i] - w[i+1]
             record_dict[w[i]] = eigen_spacing
@@ -108,9 +108,11 @@ def statistic_matrix(mat, fname):
     
     plt.ylabel("associated eigen_spacing")
     plt.xlabel("eigv")
-    tittle = "eigv v.s. associated eigen_spacing " + fname
+    tittle = "eigv v.s. eigs " + fname
     plt.title(tittle)
-    plt.show()
+    str_out = "/Users/lovingmage/Downloads/data/plots/top_100_gen/" + fname + ".png"
+    plt.savefig(str_out)
+
     
     
 def eigen_spacing_plots(mat, file_name):
@@ -155,6 +157,17 @@ def eigen_spacing_plots(mat, file_name):
     
     
 if __name__ == "__main__":
+    
+    node_num = 3000
+    mode = 0
+    m = 15
+    pr = 0.7
+    G = nx.barabasi_albert_graph(3000, m)
+    npmat = nx.to_numpy_matrix(G, G.nodes())
+    str_tittle = "ba_300_3000_r:" + str(pr) + "_m:"+ str(m)+ "_mode:" + str(mode)
+    statistic_matrix(npmat, str_tittle, 1)
+    
+    '''
     file_list=[
             "com-amazon.ungraph.txt", 
             "com-dblp.ungraph.txt",
@@ -176,4 +189,5 @@ if __name__ == "__main__":
     statistic_matrix(npmat, file_list[7])
     
     #statistic_random_matrix(1000,2)
+    '''
    
