@@ -10,6 +10,8 @@ from numpy import linalg as LA
 import matplotlib.pyplot as plt
 import networkx as nx
 import scipy.sparse as sparse
+from scipy.optimize import curve_fit
+
 
 def statistic_random_matrix(mat_size, REPS):
     matrix_size = mat_size
@@ -28,10 +30,10 @@ def statistic_random_matrix(mat_size, REPS):
                 record_dict[w[i]] = eigen_spacing
         
 #sorted_data = sorted(record_dict.items(), key=lambda items: items[1])
+    params = curve_fit(fitfunc, record_dict.keys(), record_dict.values())
+    print params[0]
 
     plt.plot(record_dict.keys(), record_dict.values(), 'rx', markersize = 3.3)
-    plt.yscale('log')
-    plt.xscale('log')
     plt.ylabel("associated eigenspacing")
     plt.xlabel("eigenvalue")
     tittle = "eigenvalue v.s. associated eigenspacing " + "matrix size " + str(mat_size)
@@ -86,9 +88,11 @@ def eigen_spacing_distribution(mat):
     plt.title(tittle)
     plt.show()
     
+def fitfunc(x, a, b, c):
+    return a * np.exp(b * x) + c
 
 def statistic_matrix(mat, fname, mode):
-    w, v = sparse.linalg.eigsh(mat, k=300)
+    w, v = sparse.linalg.eigsh(mat, k=1000)
     w = np.sort(w)
     w = w[::-1]
     
@@ -101,10 +105,13 @@ def statistic_matrix(mat, fname, mode):
             record_dict[w[i]] = eigen_spacing
         
     #print record_dict
-    del record_dict[min(record_dict.keys())]
+    del record_dict[min(record_dict.keys())]    
+    params = curve_fit(fitfunc, record_dict.keys(), record_dict.values())
     plt.plot(record_dict.keys(), record_dict.values(), 'rx', markersize = 3.3)
+    #plt.plot(record_dict.keys(), fitfunc(record_dict.keys(), *popt), 'r-', label='fit')
     #plt.yscale('log')
     #plt.xscale('log')
+    print params[0]
     
     plt.ylabel("associated eigen_spacing")
     plt.xlabel("eigv")
@@ -158,16 +165,18 @@ def eigen_spacing_plots(mat, file_name):
     
 if __name__ == "__main__":
     
+    
+    '''
     node_num = 3000
     mode = 0
     m = 15
-    pr = 0.7
+    pr = 0.3
     G = nx.barabasi_albert_graph(3000, m)
     npmat = nx.to_numpy_matrix(G, G.nodes())
     str_tittle = "ba_300_3000_r:" + str(pr) + "_m:"+ str(m)+ "_mode:" + str(mode)
     statistic_matrix(npmat, str_tittle, 1)
-    
     '''
+    
     file_list=[
             "com-amazon.ungraph.txt", 
             "com-dblp.ungraph.txt",
@@ -183,11 +192,11 @@ if __name__ == "__main__":
             "netscience.txt",
             "power.txt"]
     
-    file_name = "/Users/lovingmage/Downloads/data/" + file_list[7]
+    file_name = "/Users/lovingmage/Downloads/data/" + file_list[-1]
     G=nx.read_edgelist(file_name)
     npmat = nx.to_numpy_matrix(G, G.nodes())
-    statistic_matrix(npmat, file_list[7])
+    statistic_matrix(npmat, file_list[7], 0)
     
     #statistic_random_matrix(1000,2)
-    '''
+    
    
