@@ -89,10 +89,10 @@ def eigen_spacing_distribution(mat):
     plt.show()
     
 def fitfunc(x, a, b, c):
-    return a * np.exp(b * x) + c
+    return a * np.exp(np.multiply(b, x)) + c
 
 def statistic_matrix(mat, fname, mode):
-    w, v = sparse.linalg.eigsh(mat, k=1000)
+    w, v = sparse.linalg.eigsh(mat, k=100)
     w = np.sort(w)
     w = w[::-1]
     
@@ -108,7 +108,7 @@ def statistic_matrix(mat, fname, mode):
     del record_dict[min(record_dict.keys())]    
     params = curve_fit(fitfunc, record_dict.keys(), record_dict.values())
     plt.plot(record_dict.keys(), record_dict.values(), 'rx', markersize = 3.3)
-    #plt.plot(record_dict.keys(), fitfunc(record_dict.keys(), *popt), 'r-', label='fit')
+    #plt.plot(record_dict.keys(), fitfunc(record_dict.keys(), 0.00899265, 0.64684346, -0.10575506), 'r-', label='fit')
     #plt.yscale('log')
     #plt.xscale('log')
     print params[0]
@@ -191,12 +191,13 @@ if __name__ == "__main__":
             "dolphins.txt",
             "netscience.txt",
             "power.txt"]
-    
+    '''
     file_name = "/Users/lovingmage/Downloads/data/" + file_list[-1]
     G=nx.read_edgelist(file_name)
     npmat = nx.to_numpy_matrix(G, G.nodes())
-    statistic_matrix(npmat, file_list[7], 0)
+    statistic_matrix(npmat, file_list[-2], 0)
+    '''
     
-    #statistic_random_matrix(1000,2)
+    statistic_random_matrix(1000,2)
     
    
